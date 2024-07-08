@@ -1,0 +1,31 @@
+.main-button {
+    width: 364px;
+    height: 48px;
+    border: 0;
+    border-radius: 12px;
+    background: rgb(0, 182, 39);
+
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0%;
+    text-align: center;
+
+    cursor: pointer;
+
+    &:hover {
+        background: rgb(12, 158, 18);
+    }
+
+    &:active {
+        box-sizing: border-box;
+        border: 2px solid rgb(38, 38, 54);
+        border-radius: 12px;
+    }
+
+    &_disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}

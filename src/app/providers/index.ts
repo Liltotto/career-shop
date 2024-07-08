@@ -1,0 +1,1 @@
+export {ProviderRedux} from './provider'

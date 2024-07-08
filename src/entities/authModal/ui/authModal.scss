@@ -1,0 +1,63 @@
+.authModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    // margin: auto;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+
+        border-radius: 16px;
+        box-shadow: 0px 6px 36px 0px rgba(76, 91, 132, 0.07);
+        background: rgb(255, 255, 255);
+        padding: 32px 48px 40px 48px;
+    }
+
+    &__title {
+        color: rgb(38, 38, 54);
+        //font-family: Inter;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 28px;
+        letter-spacing: 0%;
+        text-align: center;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+    }
+
+    &__under {
+        display: flex;
+        gap: 3px;
+        color: rgb(38, 38, 54);
+        //font-family: Inter;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: 0%;
+        text-align: left;
+
+        &-link {
+            //color: rgb(0, 182, 39);
+            cursor: pointer;
+            border-bottom: 1px dashed rgb(162, 162, 168);
+        }
+    }
+}
