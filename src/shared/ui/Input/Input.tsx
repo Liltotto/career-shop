@@ -20,7 +20,7 @@ export default function Input({label, type, value, handleChange} : IInput) {
 
     return (
         <div  className="input-container">
-            <input type={type} className={value && 'filled_input'}  onChange={(e) => handleChange(e.target.value)} required /> 
+            <input type={type} className={value && 'filled_input'} value={value} onChange={(e) => handleChange(e.target.value)} required /> 
             <label  className={value && 'filled_label'} >{label}</label>
         </div>
       

@@ -3,6 +3,7 @@ import './authModal.scss'
 import { Link } from 'react-router-dom'
 import Input from 'shared/ui/Input/Input'
 import Button from 'shared/ui/Button/Button'
+import { useAuth } from 'features/authentication/lib/hooks/use-auth'
 
 interface IAuthModal {
   title: string,
@@ -11,22 +12,28 @@ interface IAuthModal {
   link_src: string,
   link_text: string,
   button_handlerClick: (email: string, pass: string) => void,
-  isRegister?: boolean
+  isRegister?: boolean,
+  isUpdateUser?: boolean
 }
 
-export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister }) => {
+export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister, isUpdateUser }) => {
 
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+  const {email, password} = useAuth()
 
-  const [passToCheck, setPassToCheck] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+
+  const [passwordToCheck, setPasswordToCheck] = useState('');
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
-    if (pass && passToCheck) setIsButtonDisabled(pass !== passToCheck);
-
-  }, [passToCheck])
+    if (userPassword && passwordToCheck) setIsButtonDisabled(userPassword !== passwordToCheck);
+    if(isUpdateUser) {
+      setUserEmail(email)
+      setUserPassword(password!)
+    }
+  }, [passwordToCheck])
 
   return (
     <div className='authModal'>
@@ -36,19 +43,19 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
           <Input
             label="E-mail"
             type="email"
-            value={email}
-            handleChange={setEmail}
+            value={userEmail}
+            handleChange={setUserEmail}
           />
           <Input
             label='Пароль'
             type="password"
-            value={pass}
-            handleChange={setPass}
+            value={userPassword}
+            handleChange={setUserPassword}
           />
 
-          {isRegister && <Input label="Повторите пароль" type="password" value={passToCheck} handleChange={setPassToCheck} />}
+          {isRegister && <Input label="Повторите пароль" type="password" value={passwordToCheck} handleChange={setPasswordToCheck} />}
 
-          <Button isDisabled={isButtonDisabled} handleClick={() => button_handlerClick(email, pass)}>{button_text}</Button>
+          <Button isDisabled={isButtonDisabled} handleClick={() => button_handlerClick(userEmail, userPassword)}>{button_text}</Button>
         </div>
 
       </div>
