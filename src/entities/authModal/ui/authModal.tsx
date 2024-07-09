@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Input } from 'shared/ui/Input/Input'
 import { Button } from 'shared/ui/Button/Button'
@@ -6,7 +6,6 @@ import { useAuth } from 'features/authentication/lib/hooks/use-auth'
 import { Controller, FieldValues, SubmitHandler, useForm, useWatch } from 'react-hook-form'
 
 import './authModal.scss'
-import { disablePersistentCacheIndexAutoCreation } from 'firebase/firestore'
 import WarningWindow from 'shared/ui/WarningWindow/WarningWindow'
 import { setIsErrorInvalidUser, setIsErrorSameEmail } from 'features/authentication'
 import { useDispatch } from 'react-redux'
@@ -18,30 +17,14 @@ interface IAuthModal {
   link_src: string,
   link_text: string,
   button_handlerClick: (email: string, pass: string) => void | SubmitHandler<FieldValues>,
-  isRegister?: boolean,
-  isUpdateUser?: boolean
+  isRegister?: boolean
 }
 
-export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister, isUpdateUser }) => {
+export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister }) => {
 
-  const { email, password, isErrorSameEmail, isErrorInvalidUser} = useAuth()
-
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-
-  const [passwordToCheck, setPasswordToCheck] = useState('');
-
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { isErrorSameEmail, isErrorInvalidUser} = useAuth()
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    //if (userPassword && passwordToCheck) setIsButtonDisabled(userPassword !== passwordToCheck);
-    if (isUpdateUser) {
-      setUserEmail(email)
-      setUserPassword(password!)
-    }
-  }, [passwordToCheck])
 
   useEffect(() => {
     if (isErrorSameEmail) {
@@ -63,25 +46,14 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
     register,
     formState: { errors, isValid },
     handleSubmit,
-    control,
-    reset,
+    control
   } = useForm({
     mode: 'onChange',
   })
 
-
-  // const { getValues } = useForm();
-
-  // const user_email = getValues('email');
-  // const user_password = getValues('password');
-  //console.log(getValues());
-
   const email_watcher = useWatch({ name: "email", control });
   const password_watcher = useWatch({ name: "password", control });
-  const repeate_password_watcher = useWatch({ name: "repeate_password", control });
 
-
-  //console.log(errors);
   return (
     <div className='authModal'>
       <div className="authModal__box">
@@ -92,7 +64,7 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
             <Controller
               name="email"
               control={control}
-              defaultValue={userEmail}
+              defaultValue={''}
               render={({ field }) => (
                 <Input
                   label="E-mail"
@@ -114,12 +86,11 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
             {errors.email && <p className='authModal__content-error'>{errors.email.message?.toString()}</p>}
           </div>
 
-
           <div className="authModal__content-item">
             <Controller
               name="password"
               control={control}
-              defaultValue={userPassword}
+              defaultValue={''}
               render={({ field }) => (
                 <Input
                   label="Пароль"
@@ -141,15 +112,12 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
             {errors.password && <p className='authModal__content-error'>{errors.password.message?.toString()}</p>}
           </div>
 
-
-
           {isRegister && (
-
             <div className="authModal__content-item">
               <Controller
                 name="repeate_password"
                 control={control}
-                defaultValue={passwordToCheck}
+                defaultValue={''}
                 render={({ field }) => (
                   <Input
                     label="Повторите пароль"

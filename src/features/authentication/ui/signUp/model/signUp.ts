@@ -25,11 +25,6 @@ export const SignUp = () => {
             })
             .catch((error) => {
                 error.code === 'auth/email-already-in-use' ? dispatch(setIsErrorSameEmail(true)) : console.error(error)
-                // if(error.code === 'auth/email-already-in-use') {
-                //     dispatch(setIsError(true))
-                // } else {
-                //     console.log(error)
-                // }
             })
             .finally(() => dispatch(setIsLoading(false)))
     }

@@ -1,7 +1,6 @@
-import { useDispatch } from 'react-redux';
-import './button.scss'
-import { setIsLoading } from 'features/authentication';
 import { useAuth } from 'features/authentication/lib/hooks/use-auth';
+
+import './button.scss'
 
 interface IButton {
   children: string
@@ -10,7 +9,6 @@ interface IButton {
 }
 
 export const Button = ({ children, handleClick, isDisabled }: IButton) => {
-  // const dispatch = useDispatch();
   
   const {isLoading} = useAuth()
 

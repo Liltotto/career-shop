@@ -6,19 +6,15 @@
 
 .input-container:focus-within label {
     transform: translate(0, 9px);
-    // font-family: Inter;
     font-size: 12px;
     font-weight: 400;
     line-height: 12px;
     letter-spacing: 2%;
     text-align: left;
-    //color: #0a53e4;
 }
 
 .input-container .filled_label {
     transform: translate(0, 9px);
-
-    // font-family: Inter;
     font-size: 12px;
     font-weight: 400;
     line-height: 12px;
@@ -41,7 +37,6 @@
     font-size: 16px;
     line-height: 1;
     left: 16px;
-
     font-size: 16px;
     font-weight: 600;
     line-height: 20px;
@@ -50,7 +45,6 @@
 }
 
 .input-container input {
-
     width: 364px;
     height: 54px;
     padding: 17px 12px 17px 14px;
@@ -59,12 +53,8 @@
     outline: none;
     box-shadow: none;
     transition: 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-
     border: 1px solid rgb(240, 240, 240);
     border-radius: 10px;
-
-    // color: rgb(38, 38, 54);
-    // font-family: Inter;
     font-size: 16px;
     font-weight: 400;
     line-height: 20px;

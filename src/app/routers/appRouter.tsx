@@ -1,6 +1,7 @@
 import { LoginPage } from "pages/login"
 import { SignUpPage } from "pages/signUp"
-import { UpdateUserPage } from "pages/updateUser/ui/updateUserPage"
+import { UpdateUserPage } from "pages/updateUser"
+
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 
 import icon from "shared/assets/RC.svg"

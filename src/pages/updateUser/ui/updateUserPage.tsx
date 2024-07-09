@@ -24,7 +24,6 @@ export function UpdateUserPage() {
       link_text="Выйти"
       button_text='Сохранить'
       button_handlerClick={handlerUpdateUser as (email: string, password: string) => void}
-      isUpdateUser={true}
     />
   )
 }
