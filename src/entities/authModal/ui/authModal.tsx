@@ -7,6 +7,9 @@ import { Controller, FieldValues, SubmitHandler, useForm, useWatch } from 'react
 
 import './authModal.scss'
 import { disablePersistentCacheIndexAutoCreation } from 'firebase/firestore'
+import WarningWindow from 'shared/ui/WarningWindow/WarningWindow'
+import { setIsErrorInvalidUser, setIsErrorSameEmail } from 'features/authentication'
+import { useDispatch } from 'react-redux'
 
 interface IAuthModal {
   title: string,
@@ -21,7 +24,7 @@ interface IAuthModal {
 
 export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister, isUpdateUser }) => {
 
-  const { email, password } = useAuth()
+  const { email, password, isErrorSameEmail, isErrorInvalidUser} = useAuth()
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -30,6 +33,8 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     //if (userPassword && passwordToCheck) setIsButtonDisabled(userPassword !== passwordToCheck);
     if (isUpdateUser) {
@@ -37,6 +42,22 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
       setUserPassword(password!)
     }
   }, [passwordToCheck])
+
+  useEffect(() => {
+    if (isErrorSameEmail) {
+      setTimeout(() => {
+        dispatch(setIsErrorSameEmail(false))
+      }, 4000)
+    }
+  }, [isErrorSameEmail])
+
+  useEffect(() => {
+    if (isErrorInvalidUser) {
+      setTimeout(() => {
+        dispatch(setIsErrorInvalidUser(false))
+      }, 3000)
+    }
+  }, [isErrorInvalidUser])
 
   const {
     register,
@@ -49,16 +70,15 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
   })
 
 
-  const { getValues } = useForm();
+  // const { getValues } = useForm();
 
-  const user_email = getValues('email');
-  const user_password = getValues('password');
+  // const user_email = getValues('email');
+  // const user_password = getValues('password');
   //console.log(getValues());
 
   const email_watcher = useWatch({ name: "email", control });
   const password_watcher = useWatch({ name: "password", control });
   const repeate_password_watcher = useWatch({ name: "repeate_password", control });
-
 
 
   //console.log(errors);
@@ -154,6 +174,8 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
           )}
 
           <Button isDisabled={!isValid} handleClick={() => handleSubmit(button_handlerClick(email_watcher, password_watcher) as SubmitHandler<FieldValues>)}>{button_text}</Button>
+
+          {isErrorInvalidUser && <p className='authModal__content-error'>Неверная почта или пароль</p>}
         </div>
 
       </div>
@@ -163,6 +185,8 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
         <Link to={link_src}><span className="authModal__under-link">{link_text}</span></Link>
       </div>
 
+
+      {isErrorSameEmail && <WarningWindow/>}
     </div>
   )
 }

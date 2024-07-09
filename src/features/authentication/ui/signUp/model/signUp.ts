@@ -1,9 +1,10 @@
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
-import {setIsLoading, setUser} from 'features/authentication/model/userSlice';
+import { setIsErrorSameEmail, setIsLoading, setUser} from 'features/authentication/model/userSlice';
 
 export const SignUp = () => {
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -22,7 +23,14 @@ export const SignUp = () => {
                 }));
                 navigate('/login');
             })
-            .catch(console.error)
+            .catch((error) => {
+                error.code === 'auth/email-already-in-use' ? dispatch(setIsErrorSameEmail(true)) : console.error(error)
+                // if(error.code === 'auth/email-already-in-use') {
+                //     dispatch(setIsError(true))
+                // } else {
+                //     console.log(error)
+                // }
+            })
             .finally(() => dispatch(setIsLoading(false)))
     }
 }

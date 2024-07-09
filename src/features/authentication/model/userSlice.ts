@@ -6,6 +6,8 @@ export interface UserState {
     id: string;
     password?: string;
     isLoading?: boolean;
+    isErrorSameEmail?: boolean;
+    isErrorInvalidUser?: boolean;
 }
 
 const initialState : UserState = {
@@ -13,7 +15,9 @@ const initialState : UserState = {
     token: '',
     id: '',
     password: '',
-    isLoading: false
+    isLoading: false,
+    isErrorSameEmail: false,
+    isErrorInvalidUser: false
 };
 
 const userSlice = createSlice({
@@ -35,11 +39,16 @@ const userSlice = createSlice({
         },
         setIsLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload
+        },
+        setIsErrorSameEmail(state, action: PayloadAction<boolean>) {
+            state.isErrorSameEmail = action.payload
+        },
+        setIsErrorInvalidUser(state, action: PayloadAction<boolean>) {
+            state.isErrorInvalidUser = action.payload
         }
-
     },
 });
 
-export const {setUser, removeUser, setPassword, setIsLoading} = userSlice.actions;
+export const {setUser, removeUser, setPassword, setIsLoading, setIsErrorSameEmail, setIsErrorInvalidUser} = userSlice.actions;
 
 export default userSlice.reducer;

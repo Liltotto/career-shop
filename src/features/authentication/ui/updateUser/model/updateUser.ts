@@ -1,5 +1,5 @@
 import { useAuth } from "features/authentication/lib/hooks/use-auth";
-import { setIsLoading, setUser } from "features/authentication/model/userSlice";
+import { setIsErrorSameEmail, setIsLoading, setUser } from "features/authentication/model/userSlice";
 import { app } from "firebase";
 import { getAuth, reauthenticateWithCredential, updateEmail, updatePassword } from "firebase/auth";
 import { EmailAuthProvider } from "firebase/auth/web-extension";
@@ -45,7 +45,7 @@ export const UpdateUser = () => {
                             // }))
                             navigate('/login')
                         })
-                        .catch(console.error)
+                        .catch((error) => error.code === 'auth/email-already-in-use' ? dispatch(setIsErrorSameEmail(true)) : console.error(error))
                 })
                 .catch(console.error)
                 .finally(() => dispatch(setIsLoading(false)))

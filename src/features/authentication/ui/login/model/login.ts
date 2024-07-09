@@ -1,13 +1,13 @@
 import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import {setIsLoading, setPassword, setUser} from 'features/authentication/model/userSlice';
+import {setIsLoading, setPassword, setUser, setIsErrorInvalidUser} from 'features/authentication/model/userSlice';
 // import { useAuth } from 'features/authentication/lib/hooks/use-auth';
 
 export const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+   
     //const {password} = useAuth();
 
     return function handleLogin(email: string, password : string) {
@@ -27,7 +27,7 @@ export const Login = () => {
                 dispatch(setPassword(password));
                 navigate('/profile')
             })
-            .catch(() => alert('Invalid user!'))
+            .catch(() => dispatch(setIsErrorInvalidUser(true)))
             .finally(() => dispatch(setIsLoading(false)))
     }
 }

@@ -2,7 +2,7 @@
 import { useAppSelector } from 'shared/lib/store/index';
 
 export function useAuth() {
-    const {email, token, id, password, isLoading} = useAppSelector((state) => state.user);
+    const {email, token, id, password, isLoading, isErrorSameEmail, isErrorInvalidUser} = useAppSelector((state) => state.user);
 
     return {
         isAuth: !!email,
@@ -10,6 +10,8 @@ export function useAuth() {
         token,
         id,
         password,
-        isLoading
+        isLoading,
+        isErrorSameEmail,
+        isErrorInvalidUser
     };
 }
