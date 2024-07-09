@@ -12,22 +12,11 @@ interface IInput {
 }
 
 export const Input = (({ label, type, value, handleChange, isError }: IInput) => {
-
-    // const [value, setValue] = useState('');
-
-    // function handleChange(e: any) {
-    //   setValue(e.target.value);
-    // }
-    // className="main-input__lable"
-    // className="main-input__item"
-    //console.log(props);
-    // const { onChange, ... } = props;
     const filled_input = value ? 'filled_input' : ''
     const error_input = isError ? 'error_input': ''
     return (
         <div className="input-container">
             <input
-                //style={ isError ? {border: '1px solid red'} : {}}
                 type={type}
                 className={`${filled_input} ${error_input}`}
                 value={value}
