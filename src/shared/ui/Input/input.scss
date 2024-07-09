@@ -78,3 +78,8 @@
     padding-bottom: 9px;
 
 }
+
+.input-container .error_input, .input-container .error_input:focus {
+    box-shadow: 0 0 0 2px  rgb(255, 64, 75);
+   
+}

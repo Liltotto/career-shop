@@ -1,16 +1,17 @@
-import { UseFormRegister, UseFormRegisterReturn } from 'react-hook-form'
+
 import './input.scss'
-import { LegacyRef, forwardRef } from 'react'
+
 
 interface IInput {
     label: string,
     type: string,
     value: string,
+    isError: boolean
     // onChange: (value: string) => void
     handleChange: (value: string) => void
 }
 
-export const Input = (({ label, type, value, handleChange }: IInput) => {
+export const Input = (({ label, type, value, handleChange, isError }: IInput) => {
 
     // const [value, setValue] = useState('');
 
@@ -21,20 +22,18 @@ export const Input = (({ label, type, value, handleChange }: IInput) => {
     // className="main-input__item"
     //console.log(props);
     // const { onChange, ... } = props;
+    const filled_input = value ? 'filled_input' : ''
+    const error_input = isError ? 'error_input': ''
     return (
         <div className="input-container">
             <input
-              
+                //style={ isError ? {border: '1px solid red'} : {}}
                 type={type}
-                className={value && 'filled_input'}
+                className={`${filled_input} ${error_input}`}
                 value={value}
-               
                 onChange={(e) => handleChange(e.target.value)}
-                // {...props}
-                
                 required
-              
-                 />
+            />
             <label className={value && 'filled_label'} >{label}</label>
         </div>
 
