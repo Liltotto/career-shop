@@ -1,9 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import './authModal.scss'
 import { Link } from 'react-router-dom'
-import Input from 'shared/ui/Input/Input'
-import Button from 'shared/ui/Button/Button'
+import { Input } from 'shared/ui/Input/Input'
+import { Button } from 'shared/ui/Button/Button'
 import { useAuth } from 'features/authentication/lib/hooks/use-auth'
+import { Controller, FieldValues, SubmitHandler, useForm, useWatch } from 'react-hook-form'
+
+import './authModal.scss'
+import { disablePersistentCacheIndexAutoCreation } from 'firebase/firestore'
 
 interface IAuthModal {
   title: string,
@@ -11,14 +14,14 @@ interface IAuthModal {
   prelink: string,
   link_src: string,
   link_text: string,
-  button_handlerClick: (email: string, pass: string) => void,
+  button_handlerClick: (email: string, pass: string) => void | SubmitHandler<FieldValues>,
   isRegister?: boolean,
   isUpdateUser?: boolean
 }
 
 export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text, button_text, button_handlerClick, isRegister, isUpdateUser }) => {
 
-  const {email, password} = useAuth()
+  const { email, password } = useAuth()
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -28,34 +31,120 @@ export const AuthModal: FC<IAuthModal> = ({ title, prelink, link_src, link_text,
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
-    if (userPassword && passwordToCheck) setIsButtonDisabled(userPassword !== passwordToCheck);
-    if(isUpdateUser) {
+    //if (userPassword && passwordToCheck) setIsButtonDisabled(userPassword !== passwordToCheck);
+    if (isUpdateUser) {
       setUserEmail(email)
       setUserPassword(password!)
     }
   }, [passwordToCheck])
 
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+    control,
+    reset,
+  } = useForm({
+    mode: 'onChange',
+  })
+
+
+  const { getValues } = useForm();
+
+  const user_email = getValues('email');
+  const user_password = getValues('password');
+  //console.log(getValues());
+
+  const email_watcher = useWatch({ name: "email", control });
+  const password_watcher = useWatch({ name: "password", control });
+  const repeate_password_watcher = useWatch({ name: "repeate_password", control });
+
+  
+
+  //console.log(errors);
   return (
     <div className='authModal'>
       <div className="authModal__box">
         <div className="authModal__title">{title}</div>
         <div className="authModal__content">
-          <Input
-            label="E-mail"
-            type="email"
-            value={userEmail}
-            handleChange={setUserEmail}
-          />
-          <Input
-            label='Пароль'
-            type="password"
-            value={userPassword}
-            handleChange={setUserPassword}
+
+          <Controller
+            name="email"
+            control={control}
+            defaultValue={userEmail}
+            render={({ field }) => (
+              <Input
+                label="E-mail"
+                type="email"
+                value={field.value}
+                handleChange={field.onChange}
+                {...register('email', {
+                  required: "Поле обязательно для заполнения",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                    message: "Некорректная почта"
+                  }
+                })}
+              />
+            )}
           />
 
-          {isRegister && <Input label="Повторите пароль" type="password" value={passwordToCheck} handleChange={setPasswordToCheck} />}
+          {errors.email && <p>{errors.email.message?.toString()}</p>}
 
-          <Button isDisabled={isButtonDisabled} handleClick={() => button_handlerClick(userEmail, userPassword)}>{button_text}</Button>
+          <Controller
+            name="password"
+            control={control}
+            defaultValue={userPassword}
+            render={({ field }) => (
+              <Input
+                label="Пароль"
+                type="password"
+                value={field.value}
+                handleChange={field.onChange}
+                {...register('password', {
+                  required: "Поле обязательно для заполнения",
+                  minLength: {
+                    value: 6,
+                    message: "Пароль должен быть не менее 6 символов"
+                  }
+                })}
+              />
+            )}
+          />
+
+          {errors.password && <p>{errors.password.message?.toString()}</p>}
+
+          {isRegister && (
+            <>
+              <Controller
+                name="repeate_password"
+                control={control}
+                defaultValue={passwordToCheck}
+                render={({ field }) => (
+                  <Input
+                    label="Повторите пароль"
+                    type="password"
+                    value={field.value}
+                    handleChange={field.onChange}
+                    {...register('repeate_password', {
+                      required: "Поле обязательно для заполнения",
+                      minLength: {
+                        value: 6,
+                        message: "Пароль должен быть не менее 6 символов"
+                      },
+                      validate: (value) => value === password_watcher || "Пароли не совпадают"
+                    })}
+                  />
+                )}
+              />
+
+              {errors.repeate_password && <p>{errors.repeate_password.message?.toString()}</p>}
+            </>
+
+
+          )}
+
+          <Button isDisabled={!isValid} handleClick={() => handleSubmit(button_handlerClick(email_watcher, password_watcher) as SubmitHandler<FieldValues>)}>{button_text}</Button>
         </div>
 
       </div>

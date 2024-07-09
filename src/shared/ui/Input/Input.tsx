@@ -1,4 +1,6 @@
+import { UseFormRegister, UseFormRegisterReturn } from 'react-hook-form'
 import './input.scss'
+import { LegacyRef, forwardRef } from 'react'
 
 interface IInput {
     label: string,
@@ -8,7 +10,7 @@ interface IInput {
     handleChange: (value: string) => void
 }
 
-export default function Input({label, type, value, handleChange} : IInput) {
+export const Input = (({ label, type, value, handleChange }: IInput) => {
 
     // const [value, setValue] = useState('');
 
@@ -17,12 +19,24 @@ export default function Input({label, type, value, handleChange} : IInput) {
     // }
     // className="main-input__lable"
     // className="main-input__item"
-
+    //console.log(props);
+    // const { onChange, ... } = props;
     return (
-        <div  className="input-container">
-            <input type={type} className={value && 'filled_input'} value={value} onChange={(e) => handleChange(e.target.value)} required /> 
-            <label  className={value && 'filled_label'} >{label}</label>
+        <div className="input-container">
+            <input
+              
+                type={type}
+                className={value && 'filled_input'}
+                value={value}
+               
+                onChange={(e) => handleChange(e.target.value)}
+                // {...props}
+                
+                required
+              
+                 />
+            <label className={value && 'filled_label'} >{label}</label>
         </div>
-      
+
     )
-}
+})

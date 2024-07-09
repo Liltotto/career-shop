@@ -50,6 +50,7 @@ export const UpdateUser = () => {
                 .catch(console.error)
                 .finally(() => dispatch(setIsLoading(false)))
         })
+        .catch(console.error)
 
     }
 }

@@ -9,7 +9,7 @@ interface IButton {
   isDisabled?: boolean
 }
 
-export default function Button({ children, handleClick, isDisabled }: IButton) {
+export const Button = ({ children, handleClick, isDisabled }: IButton) => {
   // const dispatch = useDispatch();
   
   const {isLoading} = useAuth()
